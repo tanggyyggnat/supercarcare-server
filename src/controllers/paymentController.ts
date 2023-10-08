@@ -37,7 +37,7 @@ export const getPaymentById = async (req: Request, res: Response, next: NextFunc
 
 export const updatePayment = async (req: Request, res: Response, next: NextFunction) => {
     const { id }  = req.params
-    const { paymentMethod, bankingName, accountNumber, paymentDate, paymentSlip, stepStatus } = req.body
+    const { paymentMethod, bankingName, accountNumber, paymentDate, paymentSlip } = req.body
 
     try {
         const payment = await prisma.payment.update ({
