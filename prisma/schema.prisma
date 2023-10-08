@@ -1,0 +1,160 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum ROLE {
+  CUSTOMER
+  EMPLOYEE
+}
+
+model JobRole {
+  id         Int       @id @default(autoincrement())
+  jobName    String
+  employee   Employee[]
+}
+
+model Account {
+  id           Int        @id @default(autoincrement())
+  accountName  String     @unique
+  password     String
+  role         ROLE
+  employee     Employee?
+  customer     Customer?
+}
+
+model Employee {
+  id          Int         @id @default(autoincrement())
+  jobId       Int
+  empName     String
+  empSurname  String
+  empPhone    String
+  empSalary   Int
+  empHireDate DateTime    @default(now())
+  accountId   Int         @unique
+  account     Account     @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  jobRole     JobRole     @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  schedule    Schedules[]
+}
+
+
+model Customer {
+  id           Int      @id @default(autoincrement())
+  custName    String
+  custSurname String
+  custPhone   String
+  custEmail   String
+  accountId    Int      @unique
+  account      Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  booking      Booking[]
+}
+
+model Car {
+  id           Int      @id @default(autoincrement())
+  licensePlate String   @unique
+  custId       Int
+  carBrand     String
+  booking      Booking[]
+}
+
+model Stock {
+  id              Int      @id @default(autoincrement())
+  stockName       String
+  stockQuantity   Int
+  bookingStock    BookingStock[]
+}
+
+model BookingStock{
+  bookingId      Int      @unique
+  stockId        Int      
+  usageDate      DateTime @default(now())
+  quantityUsage  Int
+  booking        Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  stock          Stock    @relation(fields: [stockId], references: [id], onDelete: Cascade)
+
+  @@id([bookingId, stockId])
+
+}
+
+model ServiceType {
+  id                Int     @id @default(autoincrement())
+  serviceTypeName   String
+  subservice        Subservice[]
+  booking           Booking[]
+}
+
+model Booking {
+  id                    Int         @id @default(autoincrement())
+  custId                Int
+  carId                 Int
+  serviceTypeId         Int
+  appointmentDateTime   DateTime 
+  description           String?
+  stepStatus            STEP_STATUS @default(IN_PROCESS)
+  customer              Customer    @relation(fields: [custId], references: [id], onDelete: Cascade)
+  car                   Car         @relation(fields: [carId], references: [id], onDelete: Cascade)
+  serviceType           ServiceType @relation(fields: [serviceTypeId], references: [id], onDelete: Cascade)
+  schedule              Schedules?
+  payment               Payment?
+  process               Process[]
+  bookingStock          BookingStock?
+}
+
+model Subservice {
+  id              Int         @id @default(autoincrement())
+  serviceTypeId   Int
+  subServiceName  String
+  price           Int
+  serviceType     ServiceType @relation(fields: [serviceTypeId], references: [id], onDelete: Cascade)
+  process         Process[]
+}
+
+model Process {
+  id               Int          @id @default(autoincrement())
+  bookingId        Int       
+  subServiceId     Int
+  stepStatus       STEP_STATUS  @default(WAITING)
+  timestamp        DateTime?  
+  booking          Booking    @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  subService       Subservice @relation(fields: [subServiceId], references: [id], onDelete: Cascade)
+}
+
+
+model Schedules {
+  id                 Int       @id @default(autoincrement())
+  empId              Int  
+  bookingId          Int       @unique
+  employee       Employee      @relation(fields: [empId], references: [id], onDelete: Cascade)
+  booking        Booking       @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+}
+
+enum STEP_STATUS {
+  WAITING
+  IN_PROCESS
+  COMPLETE
+}
+
+enum PAYMENT_METHOD {
+  NONE
+  CASH
+  MOBILE_BANKING
+}
+model Payment {     
+  id             Int        @id @default(autoincrement())
+  bookingId      Int        @unique
+  amountMoney    Int      
+  paymentMethod  PAYMENT_METHOD? @default(NONE)
+  bankingName    String?
+  accountNumber  String?
+  paymentDate    DateTime?  
+  paymentSlip    Bytes?
+  stepStatus     STEP_STATUS @default(WAITING)
+  booking        Booking     @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+}
