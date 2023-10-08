@@ -20,6 +20,24 @@ export const createBookingStock = async (req: Request, res: Response, next: Next
                 quantityUsage: quantityUsage
             }
         })
+
+        //หาว่าใน stock มีจำนวนเท่าไหร่
+        const stock = await prisma.stock.findUnique({
+            where:{
+                id: stockId
+            }
+        });
+
+        //update amountMoney Payment 
+        let quanInStock = stock?.stockQuantity || 0;
+
+        const updateStock = await prisma.stock.update({
+            where: { id: stockId },
+            data: {
+                stockQuantity: quanInStock - quantityUsage
+            }
+        });
+
         res.send(newBookingStock);
     } catch (err:any){
         res.status(err.status || 500).json({ message: err.message });
