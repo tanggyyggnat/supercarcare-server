@@ -1,2 +1,0 @@
--- AddForeignKey
-ALTER TABLE `Car` ADD CONSTRAINT `Car_custId_fkey` FOREIGN KEY (`custId`) REFERENCES `Customer`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;

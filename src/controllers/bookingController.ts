@@ -129,7 +129,7 @@ export const createBooking = async (req: Request, res: Response, next: NextFunct
 
 }
 
-export const deleteBooking = async (req: Request, res: Response, next: NextFunction) => {
+export const cancelBooking = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { id } = req.params;
 
@@ -137,14 +137,35 @@ export const deleteBooking = async (req: Request, res: Response, next: NextFunct
             return res.status(400).json({ error: " Booking ID Not Found!" });
         }
 
-        const booking = await prisma.booking.delete({
+        const booking = await prisma.booking.update({
             where: {
                 id: Number(id)
+            },
+            data: {
+                stepStatus: "CANCEL"
             }
         })
 
-        res.send(booking)
+        const deleteSchedule = await prisma.schedules.delete ({
+            where: {
+                bookingId: Number(id)
+            }
+        })
+
+        const deleteProcess = await prisma.process.deleteMany ({
+            where: {
+                bookingId: Number(id)
+            }
+        })
+
+        const deletePayment = await prisma.payment.delete ({
+            where: {
+                bookingId: Number(id)
+            }
+        })
+
+        res.send(deleteSchedule)
     } catch (err) {
-        return res.status(500).json({ error: "Can not Delete Booking ID" });
+        return res.status(500).json({ error: "Can not cancel Booking ID" });
     }
 }

@@ -92,7 +92,7 @@ CREATE TABLE `Booking` (
     `serviceTypeId` INTEGER NOT NULL,
     `appointmentDateTime` DATETIME(3) NOT NULL,
     `description` VARCHAR(191) NULL,
-    `stepStatus` ENUM('WAITING', 'IN_PROCESS', 'COMPLETE') NOT NULL DEFAULT 'IN_PROCESS',
+    `stepStatus` ENUM('CANCEL', 'WAITING', 'IN_PROCESS', 'COMPLETE') NOT NULL DEFAULT 'IN_PROCESS',
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -112,7 +112,7 @@ CREATE TABLE `Process` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `bookingId` INTEGER NOT NULL,
     `subServiceId` INTEGER NOT NULL,
-    `stepStatus` ENUM('WAITING', 'IN_PROCESS', 'COMPLETE') NOT NULL DEFAULT 'WAITING',
+    `stepStatus` ENUM('CANCEL', 'WAITING', 'IN_PROCESS', 'COMPLETE') NOT NULL DEFAULT 'WAITING',
     `timestamp` DATETIME(3) NULL,
 
     PRIMARY KEY (`id`)
@@ -137,8 +137,8 @@ CREATE TABLE `Payment` (
     `bankingName` VARCHAR(191) NULL,
     `accountNumber` VARCHAR(191) NULL,
     `paymentDate` DATETIME(3) NULL,
-    `paymentSlip` LONGBLOB NULL,
-    `stepStatus` ENUM('WAITING', 'IN_PROCESS', 'COMPLETE') NOT NULL DEFAULT 'WAITING',
+    `paymentSlip` VARCHAR(191) NULL,
+    `stepStatus` ENUM('CANCEL', 'WAITING', 'IN_PROCESS', 'COMPLETE') NOT NULL DEFAULT 'WAITING',
 
     UNIQUE INDEX `Payment_bookingId_key`(`bookingId`),
     PRIMARY KEY (`id`)
@@ -152,6 +152,9 @@ ALTER TABLE `Employee` ADD CONSTRAINT `Employee_jobId_fkey` FOREIGN KEY (`jobId`
 
 -- AddForeignKey
 ALTER TABLE `Customer` ADD CONSTRAINT `Customer_accountId_fkey` FOREIGN KEY (`accountId`) REFERENCES `Account`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `Car` ADD CONSTRAINT `Car_custId_fkey` FOREIGN KEY (`custId`) REFERENCES `Customer`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `BookingStock` ADD CONSTRAINT `BookingStock_bookingId_fkey` FOREIGN KEY (`bookingId`) REFERENCES `Booking`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;

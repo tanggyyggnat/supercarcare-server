@@ -138,6 +138,7 @@ model Schedules {
 }
 
 enum STEP_STATUS {
+  CANCEL
   WAITING
   IN_PROCESS
   COMPLETE
