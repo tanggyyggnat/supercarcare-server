@@ -4,48 +4,27 @@ import { PrismaClient } from "@prisma/client"
 const prisma = new PrismaClient()
 
 export const signin = async (req: Request, res: Response, next: NextFunction) => {
-    const { accountName, password, role } = req.body
-
+    const { accountName, password } = req.body
+try{
 //กรอกไม่ครบ
     if (!accountName || !password){
         res.status(400).json({ error: " Please complete the information." }); //ส่งไปยังหน้าบ้าน
     }
 
-
-//check role
-    if (role == "CUSTOMER"){
-        const customerCheck = await prisma.account.findUnique({
-            where: { accountName, password, role },
-            include: {
-                customer: true
-            }
+        const signin = await prisma.account.findUnique({
+            where: { accountName, password }
         })
         
-        if (!customerCheck){
+        if (!signin){
             return res.status(404).json({ error: 'User not found' });
         }
 
-        if (customerCheck.password != password) {
+        if (signin.password != password) {
             return res.status(401).json({ error: 'Incorrect password' });
         }
-        res.send(customerCheck)
-    }    
+        res.send(signin)  
 
-    else if (role == "EMPLOYEE"){
-        const employeeCheck = await prisma.account.findUnique({
-            where: { accountName, password, role },
-            include: {
-                employee: true
-            }
-        })
-        
-        if (!employeeCheck){
-            return res.status(404).json({ error: 'User not found' });
-        }
-
-        if (employeeCheck.password != password) {
-            return res.status(401).json({ error: 'Incorrect password' });
-        }
-        res.send(employeeCheck)
-    } 
+} catch (err:any) {
+    res.status(err.status || 500).json({ message: err.message });
+} 
 }
