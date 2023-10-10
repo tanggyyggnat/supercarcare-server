@@ -308,6 +308,12 @@
 //   booking          Booking   @relation(fields: [bookingId], references: [id], onDelete: Cascade)
 // }
 
+//Booking: { "custId": 1, "serviceTypeId": 1, "appointmentDateTime": "2023-10-09T12:30:00Z", "description": "I want Full-Service Wash", "licensePlate": "AB 1234", "carBrand": "BMW" }
+//Process: { "bookingId": 1, "subserviceId": 3}
+//Payment: {
+            //     "paymentMethod": "MOBILE_BANKING",
+            //     "bankingName": "haha", "accountNumber": "fjliej", "paymentSlip": "https://media.licdn.com/dms/image/D4D12AQGSUCdSv875WQ/article-cover_image-shrink_720_1280/0/1672983608188?e=2147483647&v=beta&t=IlhnZgcnPiTYZNxH3eYu13ylwHLhYvWN3EbcQA-iiuM"
+            // }
 
 
 

@@ -224,6 +224,10 @@ async function main() {
     const newSubservice = await prisma.subservice.createMany ({
         data: [{
             serviceTypeId: 1,
+            subServiceName: "Check In",
+            price: 0
+        },{
+            serviceTypeId: 1,
             subServiceName: "Exterior Wash", //การล้างภายนอก
             price: 500
         },{
@@ -242,6 +246,10 @@ async function main() {
             serviceTypeId: 1,
             subServiceName: "Air Conditioner Cleaning", //การทำความสะอาดระบบปรับอากาศ
             price: 800
+        },{
+            serviceTypeId: 2,
+            subServiceName: "Check In",
+            price: 0
         },{
             serviceTypeId: 2,
             subServiceName: "Air Conditioning System Repair", // การซ่อมระบบปรับอากาศ 
@@ -264,6 +272,10 @@ async function main() {
             price: 4000
         },{
             serviceTypeId: 3,
+            subServiceName: "Check In",
+            price: 0
+        },{
+            serviceTypeId: 3,
             subServiceName: "Engine Diagnostics", //การวิเคราะห์เครื่องยนต์
             price: 1500
         },{
@@ -279,9 +291,7 @@ async function main() {
             subServiceName: "Engine Compartment Maintenance", //การบำรุงรักษาร่วมพระเอกเครื่องยนต์
             price: 2000
         }]
-    })
-
-
+    });
 
 }
 

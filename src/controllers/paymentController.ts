@@ -37,22 +37,35 @@ export const getPaymentById = async (req: Request, res: Response, next: NextFunc
 
 export const updatePayment = async (req: Request, res: Response, next: NextFunction) => {
     const { id }  = req.params
-    const { paymentMethod, bankingName, accountNumber, paymentDate, paymentSlip } = req.body
+    const { paymentMethod } = req.body
 
     try {
-        const payment = await prisma.payment.update ({
+        if (paymentMethod == "CASH"){
+            const payment = await prisma.payment.update ({
+                where: { id: Number(id) },
+                data: {
+                    paymentMethod: paymentMethod,
+                    paymentDate: new Date(), 
+                    stepStatus: "COMPLETE"
+                }
+            });
+            res.send(payment)
 
-            where: { id: Number(id) },
-            data: {
-                paymentMethod: paymentMethod, 
-                bankingName: bankingName, 
-                accountNumber: accountNumber, 
-                paymentDate: paymentDate, 
-                paymentSlip: paymentSlip, 
-                stepStatus: "COMPLETE"
-            }
-        });
-        res.send(payment)
+        }else if(paymentMethod == "MOBILE_BANKING"){
+            const { bankingName, accountNumber , paymentSlip } = req.body
+            const payment = await prisma.payment.update ({
+                where: { id: Number(id) },
+                data: {
+                    paymentMethod: paymentMethod, 
+                    bankingName: bankingName, 
+                    accountNumber: accountNumber, 
+                    paymentDate: new Date(), 
+                    paymentSlip: paymentSlip, 
+                    stepStatus: "COMPLETE"
+                }
+            });
+            res.send(payment)
+        }
         
     } catch (err:any) {
         res.status(err.status || 500).json({ message: err.message });

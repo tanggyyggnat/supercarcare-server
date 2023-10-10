@@ -54,6 +54,7 @@ model Customer {
   accountId    Int      @unique
   account      Account  @relation(fields: [accountId], references: [id], onDelete: Cascade)
   booking      Booking[]
+  car          Car[]
 }
 
 model Car {
@@ -61,6 +62,7 @@ model Car {
   licensePlate String   @unique
   custId       Int
   carBrand     String
+  customer     Customer @relation(fields: [custId], references: [id], onDelete: Cascade)
   booking      Booking[]
 }
 
@@ -154,7 +156,7 @@ model Payment {
   bankingName    String?
   accountNumber  String?
   paymentDate    DateTime?  
-  paymentSlip    Bytes?
+  paymentSlip    String?
   stepStatus     STEP_STATUS @default(WAITING)
   booking        Booking     @relation(fields: [bookingId], references: [id], onDelete: Cascade)
 }

@@ -34,10 +34,10 @@ export const getBookingById = async (req: Request, res: Response, next: NextFunc
 
 export const createBooking = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { custId, serviceTypeId, appointmentDateTime, description, licensePlate, carBrand} = req.body
+        const { custId, serviceTypeId, appointmentDateTime, description, licensePlate, carBrand } = req.body
            
         //ข้อมูลกรอกไม่ครบ
-        if (!custId || !serviceTypeId || !appointmentDateTime || !description || !licensePlate || !carBrand) {
+        if (!custId || !serviceTypeId || !appointmentDateTime || !licensePlate || !carBrand) {
             res.status(400).json({ error: " Please complete the information." });
             return;
         }
@@ -127,4 +127,24 @@ export const createBooking = async (req: Request, res: Response, next: NextFunct
         res.status(err.status || 500).json({ message: err.message });
     }
 
+}
+
+export const deleteBooking = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { id } = req.params;
+
+        if (!id) {
+            return res.status(400).json({ error: " Booking ID Not Found!" });
+        }
+
+        const booking = await prisma.booking.delete({
+            where: {
+                id: Number(id)
+            }
+        })
+
+        res.send(booking)
+    } catch (err) {
+        return res.status(500).json({ error: "Can not Delete Booking ID" });
+    }
 }
