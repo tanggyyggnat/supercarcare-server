@@ -50,47 +50,5 @@ router.use("/car", carRoute)
 router.use("/stock", stockRoute)
 router.use("/bookingStock", bookingStockRoute)
 
+
 export default router;
-
-
-
-
-
-
-
-
-
-
-
-
-// import express from "express"
-
-// import accountRoute from "./accountRoute"
-// import loginRoute from "./loginRoute"
-// import employeeRoute from "./employeeRoute"
-// import jobroleRoute from "./jobroleRoute"
-// import customerRoute from "./customerRoute"
-// import bookingRoute from "./bookingRoute"
-// import scheduleRoute from "./scheduleRoute"
-// import progressRoute from "./progressRoute"
-// import paymentRoute from "./paymentRoute"
-// import carRoute from "./carRoute"
-// import stockRoute from "./stockRoute"
-// import carhistoryRoute from "./carhistoryRoute"
-
-// const router = express.Router();
-
-// router.use("/booking", BookingRoute)
-// // router.use("/login", loginRoute)
-// // router.use("/employee", employeeRoute)
-// // router.use("/jobrole", jobroleRoute)
-// // router.use("/customer", customerRoute)
-// // router.use("/booking", bookingRoute)
-// // router.use("/schedule", scheduleRoute)
-// // router.use("/progress", progressRoute)
-// // router.use("/payment", paymentRoute)
-// // router.use("/car", carRoute)
-// // router.use("/stock", stockRoute)
-// // router.use("/carhistory", carhistoryRoute)
-
-// export default router;

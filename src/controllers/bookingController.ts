@@ -169,3 +169,20 @@ export const cancelBooking = async (req: Request, res: Response, next: NextFunct
         return res.status(500).json({ error: "Can not cancel Booking ID" });
     }
 }
+
+export const searchScheduleDateTime = async (req: Request, res: Response, next: NextFunction) => {
+    
+    const { appointmentDateTime } = req.body
+
+    try {
+        const dateTime = await prisma.booking.findMany({
+            where: {
+              appointmentDateTime: appointmentDateTime,
+            },
+        });
+        res.send(dateTime)
+        
+    } catch (err:any) {
+        res.status(err.status || 500).json({ message: err.message });
+    }
+}

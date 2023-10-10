@@ -73,3 +73,19 @@ export const updateStock = async (req: Request, res: Response, next: NextFunctio
         res.status(err.status || 500).json({ message: err.message });
     }
 }
+
+export const searchStock = async (req: Request, res: Response, next: NextFunction) => {
+    const { stockName } = req.body
+
+    try {
+        const stock = await prisma.stock.findMany({
+            where: {
+              stockName: stockName, // Replace with the name you want to search for
+            },
+        });
+        res.send(stock)
+        
+    } catch (err:any) {
+        res.status(err.status || 500).json({ message: err.message });
+    }
+}
