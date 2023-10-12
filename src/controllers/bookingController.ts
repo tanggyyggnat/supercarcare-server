@@ -132,6 +132,7 @@ export const createBooking = async (req: Request, res: Response, next: NextFunct
 export const cancelBooking = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { id } = req.params;
+        const { stepStatus } = req.body;
 
         if (!id) {
             return res.status(400).json({ error: " Booking ID Not Found!" });
