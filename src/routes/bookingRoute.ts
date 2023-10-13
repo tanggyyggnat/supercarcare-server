@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.post("/", createBooking)
 router.get("/", getBooking)
-router.get("/dateTime", searchScheduleDateTime)
+router.post("/dateTime", searchScheduleDateTime)
 router.get("/:id", getBookingById)
 router.patch("/:id", cancelBooking)
 
