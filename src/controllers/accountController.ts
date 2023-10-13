@@ -19,6 +19,9 @@ export const getAccountById = async (req: Request, res: Response, next: NextFunc
             where: {
                 id: Number(id),
               },
+              include: {
+                customer: true,
+              }
         });
 
         if (!account) {
