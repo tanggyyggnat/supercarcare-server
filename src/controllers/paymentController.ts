@@ -50,6 +50,13 @@ export const updatePayment = async (req: Request, res: Response, next: NextFunct
                     stepStatus: "COMPLETE"
                 }
             });
+
+            const updateStatus = await prisma.booking.update({
+                where: { id: payment.bookingId },
+                data: {
+                    stepStatus: "COMPLETE"
+                }
+            })
             res.send(payment)
 
         } else if (data.paymentMethod == "MOBILE_BANKING") {
@@ -64,6 +71,14 @@ export const updatePayment = async (req: Request, res: Response, next: NextFunct
                     stepStatus: "COMPLETE"
                 }
             });
+
+            const updateStatus = await prisma.booking.update({
+                where: { id: payment.bookingId },
+                data: {
+                    stepStatus: "COMPLETE"
+                }
+            })
+
             res.send(payment)
         }
 
