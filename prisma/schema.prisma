@@ -6,7 +6,7 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -74,15 +74,13 @@ model Stock {
 }
 
 model BookingStock{
-  bookingId      Int      @unique
+  id             Int     @id @default(autoincrement())
+  bookingId      Int     
   stockId        Int      
   usageDate      DateTime @default(now())
   quantityUsage  Int
   booking        Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
   stock          Stock    @relation(fields: [stockId], references: [id], onDelete: Cascade)
-
-  @@id([bookingId, stockId])
-
 }
 
 model ServiceType {
@@ -97,6 +95,7 @@ model Booking {
   custId                Int
   carId                 Int
   serviceTypeId         Int
+  appointmentDateId     Int         
   appointmentDateTime   DateTime 
   description           String?
   stepStatus            STEP_STATUS @default(IN_PROCESS)
@@ -106,7 +105,7 @@ model Booking {
   schedule              Schedules?
   payment               Payment?
   process               Process[]
-  bookingStock          BookingStock?
+  bookingStock          BookingStock[]
 }
 
 model Subservice {

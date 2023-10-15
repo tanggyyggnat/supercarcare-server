@@ -29,6 +29,25 @@ export const getBookingById = async (req: Request, res: Response, next: NextFunc
                 customer: true,
                 car: true,
                 serviceType: true,
+                schedule: {
+                    include: {
+                        employee: true,
+                    }
+                },
+                process: {
+                    include: {
+                        subService: true,
+                    }
+                },
+                payment: true,
+                bookingStock: {
+                    include: {
+                        stock: true,
+                    },
+                    orderBy: {
+                        id: 'asc'
+                    }
+                },
             }
         });
 

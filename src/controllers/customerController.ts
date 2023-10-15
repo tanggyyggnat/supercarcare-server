@@ -17,7 +17,7 @@ export const getCustomerById = async (req: Request, res: Response, next: NextFun
     try {
         const customer = await prisma.customer.findUnique({
             where: {
-                id: Number(id),
+                accountId: Number(id),
               },
         });
 

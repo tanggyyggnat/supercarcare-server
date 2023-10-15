@@ -27,7 +27,11 @@ export const createStock = async (req: Request, res: Response, next: NextFunctio
 
 export const getStock = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const stock = await prisma.stock.findMany()
+        const stock = await prisma.stock.findMany({
+            orderBy: {
+                id: 'asc'
+            }
+        })
         res.send(stock)
 
     } catch (err:any) {

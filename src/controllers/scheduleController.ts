@@ -5,20 +5,32 @@ const prisma = new PrismaClient()
 
 export const getSchedule = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const schedule = await prisma.schedules.findMany()
+        const schedule = await prisma.schedules.findMany({
+            include: {
+                employee: true,
+                booking: {
+                    include: {
+                        customer: true,
+                        car: true,
+                        serviceType: true,
+                        payment: true,
+                    }
+                },
+            }
+        })
         res.send(schedule)
-    } catch (err:any) {
+    } catch (err: any) {
         res.status(err.status || 500).json({ message: err.message });
     }
 }
 
 export const getScheduleById = async (req: Request, res: Response, next: NextFunction) => {
-    const { id }  = req.params
+    const { id } = req.params
     try {
         const schedule = await prisma.schedules.findUnique({
             where: {
                 id: Number(id),
-              },
+            },
         });
 
         if (!schedule) {
@@ -28,7 +40,7 @@ export const getScheduleById = async (req: Request, res: Response, next: NextFun
 
         res.send(schedule)
 
-    } catch (err:any) {
+    } catch (err: any) {
         res.status(err.status || 500).json({ message: err.message });
     }
 }
